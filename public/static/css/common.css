@@ -1,0 +1,27 @@
+body { background: rgb(229, 229, 229);}
+.fr{float:right}
+.fl{float:left}
+.extend-width{width: 100%}
+.extend-ht{height: 100%}
+
+/*内边距*/
+.no-pd{padding: 0px;}
+.no-pd-tp{padding-top: 0px;}
+.no-pd-lf{padding-left: 0px;}
+.no-pd-rt{padding-right: 0px;}
+.no-pd-bt{padding-bottom: 0px;}
+/*边框*/
+.no-bd{border: 0px;}
+.no-bd-tp{border-top: 0px;}
+.no-bd-bt{border-bottom: 0px;}
+.no-bd-lf{border-left: 0px;}
+.no-bd-rt{border-right: 0px;}
+/*外边距*/
+.no-mg{margin: 0px;}
+.no-mg-tp{margin-top: 0px;}
+.no-mg-bt{margin-bottom: 0px;}
+.no-mg-lf{margin-left: 0px;}
+.no-mg-rt{margin-right: 0px;}
+.tb-btn-div{margin-top: 5px;margin-bottom: 5px;}
+/*li 去掉style*/
+

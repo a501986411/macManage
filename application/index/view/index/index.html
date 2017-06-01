@@ -1,0 +1,62 @@
+<div class="container ui-sortable">
+    <h1>武侯祠博物馆无线认证MAC绑定列表</h1>
+    <input class="btn btn-primary radius addBtn"  type="button" value="新增">
+    <div class="panel panel-default">
+        <table class="table table-border table-bordered table-hover">
+            <thead class="text-c">
+                <tr>
+                    <th>序号</th>
+                    <th>MAC地址</th>
+                    <th>备注</th>
+                    <th>类型</th>
+                    <th style="width: 220px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {php}
+                foreach(array_reverse($list) as $k=>$v){
+            $encode = mb_detect_encoding($v['comment'], array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
+            echo '<tr class="text-c">
+                <td>'.($k+1).'</td>
+                <td>'.$v['mac-address'].'</td>
+                <td>'.mb_convert_encoding($v['comment'],"UTF-8",$encode).'</td>
+                <td>'.$v['type'].'</td>
+                <td>
+                    <!--<input class="btn btn-primary radius editBtn"  type="button" value="编辑">-->
+                    <input class="btn btn-danger radius delBtn" data-id='.$v[".id"].' type="button" value="删除">
+                </td>
+            </tr>';
+                }
+            {/php}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+$(function(){
+    var $addBtn = $('.addBtn');
+    var $delBtn = $(".delBtn");
+    $addBtn.click(function(){
+        top.location = '{:url("edit")}'
+    });
+
+    $delBtn.click(function(){
+        $btnObj = $(this);
+        if(confirm('确认删除吗？')){
+            $id = $btnObj.data('id');
+            $.post("{:url('delMacAddress')}",{id:$id},function(result){
+//                var result = eval('('+result+')');
+                if(!result.success){
+                    alert(result.msg);
+                } else{
+                    top.location = '{:url("index")}'
+                }
+            });
+        }
+    });
+
+
+});
+
+
+</script>

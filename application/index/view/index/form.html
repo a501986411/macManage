@@ -1,0 +1,35 @@
+<script type="text/javascript" src="{$Think.const.PUBLIC_LIB_PATH}jquery.validation/1.14.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{$Think.const.PUBLIC_LIB_PATH}jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="{$Think.const.PUBLIC_LIB_PATH}jquery.validation/1.14.0/messages_zh.min.js"></script>
+<div class="container ui-sortable">
+    <h1>网络MAC地址管理</h1>
+    <div class="panel panel-default">
+        <div class="panel-header">添加设备MAC地址</div>
+        <div class="panel-body">
+            <form action="{:url('form')}" method="post" class="form form-horizontal responsive" id="fm">
+                <div class="row cl">
+                    <label class="form-label col-xs-3">设备MAC地址：</label>
+                    <div class="formControls col-xs-8">
+                        <input type="text" class="input-text" placeholder="设备MAC地址：A8:1B:5A:11:81:25" name="mac" id="mac" autocomplete="off" required="true">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-3">备注：</label>
+                    <div class="formControls col-xs-8">
+                        <input type="text" class="input-text" placeholder="MAC地址说明" name="remark" id="remark" autocomplete="off" required="true">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="col-xs-8 col-xs-offset-3">
+                        <input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;添加&nbsp;&nbsp;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    ;(function(){
+
+    })(jQuery,window,document);
+</script>
