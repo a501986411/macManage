@@ -34,22 +34,33 @@
 		 */
 		public function edit()
 		{
-			return $this->fetch('form');
+		    if(Request::instance()->has('id')) {
+                $id = input('id');
+                $logic = new MacLogic();
+                $macInfo = $logic->getMacInfo($id);
+                return $this->fetch('form',['macInfo'=>$macInfo]);
+            } else{
+                return $this->fetch('form');
+            }
 		}
 
 		public function form()
         {
 			if(Request::instance()->isPost()){
-                $data['mac'] = trim(input('mac'));
                 $data['remark'] = trim(input('remark'));
-                $result = $this->validate($data,"MacValidate");
-                if($result !== true){
-                    $this->error($result);
-                }
                 $logic = new MacLogic();
-                $ret = $logic->addMacToRos($data['mac'],$data['remark']);
-                if($ret===4001){
-                    $this->error('MAC地址重复');
+                if(Request::instance()->has('id')){ //修改
+                    $ret = $logic->updateMacBindComment(input('id'),$data['remark']);
+                } else { //新增
+                    $data['mac'] = trim(input('mac'));
+                    $result = $this->validate($data,"MacValidate");
+                    if($result !== true){
+                        $this->error($result);
+                    }
+                    $ret = $logic->addMacToRos($data['mac'],$data['remark']);
+                    if($ret===4001){
+                        $this->error('MAC地址重复');
+                    }
                 }
                 if($ret){
                     $this->success(lang('success options'),url('index'));

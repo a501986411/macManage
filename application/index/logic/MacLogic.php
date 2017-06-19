@@ -28,6 +28,10 @@
             $this->pwd = $ros['password'];
 		}
 
+        /**
+         * 获取mac地址绑定列表
+         * @return array
+         */
 		public function getMacList()
 		{
 			$ros = new RouterosInfo($this->domain,$this->port,$this->user,$this->pwd);
@@ -67,6 +71,31 @@
         }
 
         /**
+         * 修改mac地址绑定备注信息
+         * @param $id
+         * @param $comment
+         * @return bool
+         */
+        public function updateMacBindComment($id,$comment)
+        {
+            $ros = new RouterosApi();
+            if($ros->connect($this->domain.':'.$this->port,$this->user,$this->pwd)){
+                $com = '/ip/hotspot/ip-binding/set';
+                if(!$ros->write($com,false)){
+                    return false;
+                }
+                if(!$ros->write('=.id='.$id,false)){
+                    return false;
+                }
+                $ros->write('=comment='.$comment);
+                $ros->read();
+                return true;
+            }else {
+                return false;
+            }
+        }
+
+        /**
          * 删除MAC地址
          * @param $id
          * @return bool
@@ -85,4 +114,21 @@
             }
         }
 
+        /**
+         * 根据绑定记录id获取mac地址信息
+         * @param $id
+         */
+        public function getMacInfo($id)
+        {
+            $ros = new RouterosApi();
+            if($ros->connect($this->domain.':'.$this->port,$this->user,$this->pwd)){
+                $removeCom = '/ip/hotspot/ip-binding/print';
+                $ros->write($removeCom,false);
+                $ros->write('?.id='.$id);
+                $info = $ros->read(true);
+                return $info[0];
+            }else {
+                return false;
+            }
+        }
 	}

@@ -7,21 +7,32 @@
         <div class="panel-header">添加设备MAC地址</div>
         <div class="panel-body">
             <form action="{:url('form')}" method="post" class="form form-horizontal responsive" id="fm">
+                <?php if(isset($macInfo)):?>
+                <input type="hidden" class="input-text"  name="id" id="id" value="{$macInfo['.id']}">
+                <?php endif;?>
                 <div class="row cl">
                     <label class="form-label col-xs-3">设备MAC地址：</label>
                     <div class="formControls col-xs-8">
+                        <?php if(isset($macInfo)):?>
+                        <input type="text" class="input-text" placeholder="设备MAC地址：A8:1B:5A:11:81:25" name="mac" id="mac" autocomplete="off" required="true" value="{$macInfo['mac-address']}" disabled>
+                        <?php else:?>
                         <input type="text" class="input-text" placeholder="设备MAC地址：A8:1B:5A:11:81:25" name="mac" id="mac" autocomplete="off" required="true">
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-xs-3">备注：</label>
                     <div class="formControls col-xs-8">
+                        <?php if(isset($macInfo)):?>
+                        <input type="text" class="input-text" placeholder="MAC地址说明" name="remark" id="remark" autocomplete="off" required="true" value="{$macInfo['comment']}">
+                        <?php else:?>
                         <input type="text" class="input-text" placeholder="MAC地址说明" name="remark" id="remark" autocomplete="off" required="true">
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="row cl">
                     <div class="col-xs-8 col-xs-offset-3">
-                        <input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;添加&nbsp;&nbsp;">
+                        <input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;<?php if(isset($macInfo)):?> 保存 <?php else:?> 添加 <?php endif;?>&nbsp;&nbsp;">
                     </div>
                 </div>
             </form>
