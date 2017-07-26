@@ -12,7 +12,7 @@
 // 应用公共文件
 use think\Route;
 // admin子域名绑定到admin模块
-Route::domain('mac.com','index');
+Route::domain('mac.com','count');
 function enDateToCn($date)
 {
     $en = ['January','February','March','April',

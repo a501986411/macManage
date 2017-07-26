@@ -13,6 +13,7 @@
 
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../application/');
+define('PUBLIC_PATH','../../../../');
 define('STATIC_PATH','../../../../static/');
 define('PUBLIC_LIB_PATH','../../../../lib/');
 
