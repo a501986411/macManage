@@ -11,25 +11,37 @@
 
 	use app\count\logic\CountLogic;
 	use app\count\model\WhcWeixinWifiRecord;
-
+	use think\Request;
 	class Index
 	{
 		public function index()
 		{
-			$logic = new CountLogic(new WhcWeixinWifiRecord());
-			$date = new \DateTime();
+			$model = new WhcWeixinWifiRecord();
 			//今日
-			$var['countToday'] = $logic->count(strtotime(date('Y-m-d',time())),time());
+			$logic = new CountLogic($model,CountLogic::TODAY);
+			$var['countToday'] = $logic->count();
 			//本周
-			$weekFirstDay =$date->modify('this week')->format('Y-m-d');//本周第一天
-			$var['countWeek'] = $logic->count(strtotime(date('Y-m-d',strtotime($weekFirstDay))),time());
+			$logic = new CountLogic($model,CountLogic::WEEK);
+			$var['countWeek'] = $logic->count();
 			//本月
-			$var['countMonth'] = $logic->count(strtotime(date('Y-m-01',strtotime(time()))),time());
+			$logic = new CountLogic($model,CountLogic::MONTH);
+			$var['countMonth'] = $logic->count();
 			//最近30天
-			$startTime = strtotime(date("Y-m-d",time()))-(86400*29);
-			$var['count30'] = $logic->count($startTime,time());
-			return view('',$var);
+			$logic = new CountLogic($model,CountLogic::LAST30);
+			$var['count30'] = $logic->count();
+			return view('', $var);
 		}
 
 
+		public function getLineData()
+		{
+			if(Request::instance()->has('lab') && Request::instance()->isPost('lab')){
+				$label = input('lab');
+				$logic = new CountLogic(new WhcWeixinWifiRecord(),$label);
+				$data = $logic->getLineData();
+				return json($data);
+			}else{
+				throw new Exception(lang('error param'));
+			}
+		}
 	}

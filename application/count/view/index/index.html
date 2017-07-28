@@ -22,10 +22,15 @@
     <!-- this page specific styles -->
     <link rel="stylesheet" href="{$Think.const.PUBLIC_PATH}count/css/compiled/index.css" type="text/css" media="screen" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
-
-
-    <script type="text/javascript" src="{$Think.const.PUBLIC_LIB_PATH}jquery/1.9.1/jquery.min.js"></script>
-    <script src="{$Think.const.PUBLIC_PATH}count/js/echarts.min.js"></script>
+<style>
+    .tickLabel
+    {
+        -o-transform:rotate(-60deg);
+        -moz-transform:rotate(-60deg);
+        -webkit-transform:rotate(-60deg);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    }
+</style>
 <body>
 <!-- navbar -->
 <div class="navbar navbar-inverse">
@@ -69,9 +74,9 @@
             <div class="row-fluid chart">
                 <h4>
                     <div class="btn-group pull-right">
-                        <button class="glow left active">今日</button>
-                        <button class="glow middle ">本周</button>
-                        <button class="glow right">本月</button>
+                        <button class="glow left active glow1" onclick="linefun(1)">今日</button>
+                        <button class="glow middle glow2" onclick="linefun(2)">本周</button>
+                        <button class="glow right glow3" onclick="linefun(3)">本月</button>
                     </div>
                 </h4>
                 <div class="span12">
@@ -93,48 +98,58 @@
 <script src="{$Think.const.PUBLIC_PATH}count/js/theme.js"></script>
 <!-- scripts -->
 <script type="text/javascript">
-    var linefun = function(){
-        // jQuery Flot Chart
-        var visits = [[1, 50], [2, 40], [3, 45], [4, 23],[5, 55],[6, 65],[7, 61],[8, 70],[9, 65],[10, 75],[11, 57],[12, 59]];
-        var plot = $.plot($("#statsChart"),
-                [ { data: visits, label: "用户新增量"}], {
-                    series: {
-                        lines: { show: true,
-                            lineWidth: 1,
-                            fill: true,
-                            fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
+    var linefun = function(lab){
+        if(!lab){
+            lab = 1;
+        }
+        $('.active').removeClass('active');
+        $('.glow'+lab).addClass('active');
+        $.post('Index/getLineData',{lab:lab},function(result){
+            var plot = $.plot($("#statsChart"),
+                    [ { data: result.data, label: "连接次数"}], {
+                        series: {
+                            lines: { show: true,
+                                lineWidth: 1,
+                                fill: true,
+                                fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
+                            },
+                            points: {
+                                show: true,
+                                lineWidth: 2,
+                                radius: 3
+                            },
+                            shadowSize: 0,
+                            stack: true
                         },
-                        points: { show: true,
-                            lineWidth: 2,
-                            radius: 3
+                        grid: { hoverable: true,
+                            clickable: true,
+                            tickColor: "#f9f9f9",
+                            borderWidth: 0
                         },
-                        shadowSize: 0,
-                        stack: true
-                    },
-                    grid: { hoverable: true,
-                        clickable: true,
-                        tickColor: "#f9f9f9",
-                        borderWidth: 0
-                    },
-                    legend: {
-                        // show: false
-                        labelBoxBorderColor: "#fff"
-                    },
-                    colors: ["#30a0eb"],
-                    xaxis: {
-                        font: {
-                            size: 12,
-                            family: "Open Sans, Arial",
-                            variant: "small-caps",
-                            color: "#697695"
+                        legend: {
+                            // show: false
+                            labelBoxBorderColor: "#fff"
+                        },
+                        colors: ["#30a0eb"],
+                        xaxis: {
+                            ticks:result.ticks,
+                            tickDecimals:0,
+                            font: {
+                                size: 12,
+                                family: "Open Sans, Arial",
+                                variant: "small-caps",
+                                color: "#697695"
+                            }
+                        },
+                        yaxis: {
+                            ticks:3,
+                            tickDecimals: 0,
+                            font: {size:12, color: "#9da3a9"}
                         }
-                    },
-                    yaxis: {
-                        ticks:3,
-                        tickDecimals: 0,
-                        font: {size:12, color: "#9da3a9"}
-                    }
-                });
+                    });
+        });
+        // jQuery Flot Chart
+
     }
     var showTooltip = function(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css( {
@@ -149,6 +164,7 @@
             opacity: 0.80
         }).appendTo("body").fadeIn(200);
     }
+
     $(function () {
         linefun(); //默认折线图
         //设置每个点的显示文本
@@ -165,7 +181,7 @@
                     var month = item.series.xaxis.ticks[item.dataIndex].label;
 
                     showTooltip(item.pageX, item.pageY,
-                            item.series.label + " of " + month + ": " + y); //显示的文本
+                            month + '的'+ item.series.label + y); //显示的文本
                 }
             }
             else {
