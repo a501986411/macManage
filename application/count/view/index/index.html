@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Detail Admin - Home</title>
+    <title>武侯祠微信WIFI连接次数统计</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -104,7 +104,7 @@
         }
         $('.active').removeClass('active');
         $('.glow'+lab).addClass('active');
-        $.post('Index/getLineData',{lab:lab},function(result){
+        $.post('{:url(\'getLineData\')}',{lab:lab},function(result){
             var plot = $.plot($("#statsChart"),
                     [ { data: result.data, label: "连接次数"}], {
                         series: {
