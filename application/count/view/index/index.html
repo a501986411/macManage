@@ -22,24 +22,13 @@
     <!-- this page specific styles -->
     <link rel="stylesheet" href="{$Think.const.PUBLIC_PATH}count/css/compiled/index.css" type="text/css" media="screen" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
-<style>
-    .tickLabel
-    {
-        -o-transform:rotate(-60deg);
-        -moz-transform:rotate(-60deg);
-        -webkit-transform:rotate(-60deg);
-        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-    }
-</style>
 <body>
-<!-- navbar -->
 <div class="navbar navbar-inverse">
-    <h2 style="color: #9ecc9d;">武侯祠微信WIFI访问统计页面</h2>
+    <h2 style="color:greenyellow;">武侯祠微信WIFI连接次数统计</h2>
 </div>
-<!-- main container -->
 <div class="content" style="margin-left: 0px;">
     <div class="container-fluid">
-        <!-- 访问量统计 -->
+        <!-- upper main stats -->
         <div id="main-stats">
             <div class="row-fluid stats-row">
                 <div class="span3 stat">
@@ -69,10 +58,13 @@
             </div>
         </div>
         <!-- end upper main stats -->
+
         <div id="pad-wrapper">
+
             <!-- statistics chart built with jQuery Flot -->
             <div class="row-fluid chart">
                 <h4>
+                    &nbsp;
                     <div class="btn-group pull-right">
                         <button class="glow left active glow1" onclick="linefun(1)">今日</button>
                         <button class="glow middle glow2" onclick="linefun(2)">本周</button>
@@ -80,12 +72,15 @@
                     </div>
                 </h4>
                 <div class="span12">
-                    <div id="statsChart" style="height: 400px;"></div>
+                    <div id="statsChart"></div>
                 </div>
             </div>
+            <!-- end statistics chart -->
         </div>
     </div>
 </div>
+
+
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery-latest.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/bootstrap.min.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery-ui-1.10.2.custom.min.js"></script>
@@ -96,8 +91,9 @@
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery.flot.stack.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery.flot.resize.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/theme.js"></script>
-<!-- scripts -->
+
 <script type="text/javascript">
+
     var linefun = function(lab){
         if(!lab){
             lab = 1;
@@ -190,7 +186,6 @@
             }
         });
     });
-
 </script>
 
 </body>
