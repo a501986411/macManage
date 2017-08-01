@@ -29,6 +29,7 @@
 			//最近30天
 			$logic = new CountLogic($model,CountLogic::LAST30);
 			$var['count30'] = $logic->count();
+			$var['tableData'] = json_encode($logic->getTableData(0,0,1));
 			return view('', $var);
 		}
 
@@ -40,6 +41,25 @@
 				$logic = new CountLogic(new WhcWeixinWifiRecord(),$label);
 				$data = $logic->getLineData();
 				return json($data);
+			}else{
+				throw new Exception(lang('error param'));
+			}
+		}
+
+		/**
+		 * 改变table数据
+		 * @access public
+		 * @return void
+		 * @author knight
+		 */
+		public function changeTableData()
+		{
+			if(Request::instance()->isPost()){
+				$startTime = !empty(input('startTime')) ? strtotime(input('startTime')): '';
+				$endTime = !empty(input('endTime')) ? strtotime(input('endTime'))+86400 : '';
+				$page = !empty(input('page')) ? input('page'):1;
+				$logic = new CountLogic(new WhcWeixinWifiRecord(),CountLogic::TODAY);
+				return json($logic->getTableData($startTime,$endTime,$page));
 			}else{
 				throw new Exception(lang('error param'));
 			}

@@ -126,4 +126,27 @@ class CountLogic extends Model{
 		return ['data'=>$retData,'ticks'=>$ticks];
 	}
 
+	/**
+	 * 获取连接用户列表
+	 * @access public
+	 * @param int $startTime
+	 * @param int $endTime
+	 * @param int $page
+	 * @return mixed
+	 * @author knight
+	 */
+	public function getTableData($startTime=0,$endTime=0,$page=1)
+	{
+		if(!empty($startTime)){
+			$this->model->where('time','>=',$startTime);
+		}
+		if(!empty($endTime)){
+			$this->model->where('time','<',$endTime);
+		}
+		$data = $this->model->order('id desc')->limit(($page-1)*20,20)->select();
+		foreach($data as &$value){
+			$value['time'] = date('Y-m-d H:i',$value['time']);
+		}
+		return $data;
+	}
 }

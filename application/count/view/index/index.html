@@ -9,7 +9,6 @@
     <link href="{$Think.const.STATIC_PATH}bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="{$Think.const.STATIC_PATH}bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="{$Think.const.STATIC_PATH}bootstrap/css/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
-
     <!-- libraries -->
     <link href="{$Think.const.PUBLIC_PATH}count/css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
     <link href="{$Think.const.PUBLIC_PATH}count/css/lib/font-awesome.css" type="text/css" rel="stylesheet" />
@@ -21,6 +20,7 @@
 
     <!-- this page specific styles -->
     <link rel="stylesheet" href="{$Think.const.PUBLIC_PATH}count/css/compiled/index.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{$Think.const.PUBLIC_PATH}count/css/styles.css" media="all">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 <body>
 <div class="navbar navbar-inverse">
@@ -58,7 +58,6 @@
             </div>
         </div>
         <!-- end upper main stats -->
-
         <div id="pad-wrapper">
 
             <!-- statistics chart built with jQuery Flot -->
@@ -77,6 +76,49 @@
             </div>
             <!-- end statistics chart -->
         </div>
+        <div style="margin-top: 55px;margin-left:80px;max-width: 1755px;">
+            <h4>
+                访问列表
+                <div class="btn-group pull-right">
+                    <form class="form-search">
+                        连接时间 ：
+                        <div class="iDate date">
+                           <input type="text" id="startTime">
+                            <button type="button" class="addOn"></button>
+                        </div>
+                        <div class="iDate date">
+                            <input type="text" id="endTime">
+                            <button type="button" class="addOn"></button>
+                        </div>
+                        <button type="button" id="search" class="btn">查询</button>
+                    </form>
+                </div>
+            </h4>
+            <table class="table table-bordered" id="vue-tb">
+                <thead>
+                <th>用户维修Id</th>
+                <th>用户MAC地址</th>
+                <th>用户IP</th>
+                <th>连接时间</th>
+                </thead>
+                <tr v-for="item in items" :key="item.id">
+                    <td>{{item.openId}}</td>
+                    <td>{{item.mac}}</td>
+                    <td>{{item.ip}}</td>
+                    <td>{{item.time}}</td>
+                </tr>
+            </table>
+            <ul class="pager">
+                <li class="previous" id="upPage">
+                    <a href="JavaScript:void(0)">&larr; 上一页</a>
+                </li>
+                <li style="display: none" id="nowPage">1</li>
+                <li class="next" id="nextPage">
+                    <a href="JavaScript:void(0)">下一页 &rarr;</a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </div>
 
@@ -91,7 +133,9 @@
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery.flot.stack.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/jquery.flot.resize.js"></script>
 <script src="{$Think.const.PUBLIC_PATH}count/js/theme.js"></script>
-
+<script src="{$Think.const.STATIC_PATH}js/vue.js"></script>
+<script type="text/javascript" src="{$Think.const.PUBLIC_PATH}count/js/moment.js"></script>
+<script type="text/javascript" src="{$Think.const.PUBLIC_PATH}count/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
 
     var linefun = function(lab){
@@ -160,8 +204,52 @@
             opacity: 0.80
         }).appendTo("body").fadeIn(200);
     }
-
+    var tableData = {$tableData};
+    var vueTb = new Vue({
+        el:'#vue-tb',
+        data:{
+            items:tableData
+        }
+    });
+    var changeTableData = function(){
+        var startTime = $('#startTime').val();
+        var endTime = $('#endTime').val();
+        var page = $("#nowPage").text();
+        $.post('{:url(\'changeTableData\')}',{startTime:startTime,endTime:endTime,page:page},function(result){
+            $.each(vueTb.items,function(k,v){
+                Vue.set(vueTb.items,k,result[k]);
+            })
+        });
+    }
     $(function () {
+        if($(".iDate.date").length>0){
+            $(".iDate.date").datetimepicker({
+                locale:"zh-cn",
+                format:"YYYY-MM-DD",
+                dayViewHeaderFormat:"YYYY年 MMMM",
+                defaultDate:'',
+            });
+        }
+
+        $("#search").click(function(){
+            changeTableData();
+        });
+        //上一页
+        $("#upPage").click(function(){
+           var nowPage = parseInt($("#nowPage").text());
+            if(nowPage>1){
+                $("#nowPage").text(nowPage-1)
+            }
+            changeTableData();
+        });
+        //下一页
+        $("#nextPage").click(function(){
+            var nowPage = parseInt($("#nowPage").text());
+            if(vueTb.items.length>=20){
+                $("#nowPage").text(nowPage+1)
+            }
+            changeTableData();
+        });
         linefun(); //默认折线图
         //设置每个点的显示文本
         var previousPoint = null;
