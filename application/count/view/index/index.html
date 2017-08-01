@@ -96,13 +96,15 @@
             </h4>
             <table class="table table-bordered" id="vue-tb">
                 <thead>
-                <th>用户维修Id</th>
-                <th>用户MAC地址</th>
+                <th>用户微信号</th>
+                <th>用户手机号（加密后）</th>
+                <th>用户设备物理地址</th>
                 <th>用户IP</th>
                 <th>连接时间</th>
                 </thead>
                 <tr v-for="item in items" :key="item.id">
                     <td>{{item.openId}}</td>
+                    <td style="width:480px;word-wrap: break-word;word-break: break-all;">{{item.tid}}</td>
                     <td>{{item.mac}}</td>
                     <td>{{item.ip}}</td>
                     <td>{{item.time}}</td>
